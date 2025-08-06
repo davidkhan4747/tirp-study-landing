@@ -151,7 +151,7 @@ function CoursesSection() {
   ]
 
   // Определяем какие курсы показывать
-  const courses = error || !data?.courses ? mockCourses : data.courses.filter((course) => course.isPublished)
+  const courses = error || !data?.courses ? mockCourses : data.courses.filter((course:any) => course.isPublished)
 
   // Логирование для отладки
   useEffect(() => {
@@ -201,7 +201,7 @@ function CoursesSection() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courses.slice(0, 6).map((course) => (
+            {courses.slice(0, 6).map((course:any) => (
               <div
                 key={course.id}
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden"

@@ -463,14 +463,22 @@ function TripStudyLandingContent() {
 
             <div className="flex justify-center lg:justify-end relative">
               <div className="relative">
-                <div className="w-full max-w-lg h-96 bg-gradient-to-br from-[#672c8e] via-purple-600 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                  {/* Hero image goes here */}
-                  <div className="text-white text-center">
-                    <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-                      <BookOpen className="w-10 h-10" />
+                <div className="w-full max-w-lg h-96 bg-gradient-to-br from-[#672c8e] via-purple-600 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 overflow-hidden relative">
+                  <Image 
+                    src="/vhereoMain.jpg" 
+                    alt="Trip Tour Study Hero" 
+                    width={500} 
+                    height={400} 
+                    className="w-full h-full object-cover rounded-3xl"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#672c8e]/70 via-purple-600/50 to-pink-500/70 rounded-3xl flex items-center justify-center">
+                    <div className="text-white text-center">
+                      <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                        <BookOpen className="w-10 h-10" />
+                      </div>
+                      <h3 className="text-2xl font-bold mb-2">Interaktiv Darslar</h3>
+                      <p className="text-lg opacity-90">Video, test va amaliyotlar</p>
                     </div>
-                    <h3 className="text-2xl font-bold mb-2">Interaktiv Darslar</h3>
-                    <p className="text-lg opacity-90">Video, test va amaliyotlar</p>
                   </div>
                 </div>
 
@@ -683,20 +691,36 @@ function TripStudyLandingContent() {
 
             <div className="relative">
               <div className="grid grid-cols-1 gap-4">
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60">
-                  {/* Offline class image placeholder */}
-                  <div className="text-center text-gray-500 h-full flex flex-col justify-center">
-                    <BookOpen className="w-16 h-16 mx-auto mb-4" />
-                    <p className="text-lg">Oflayn darslar</p>
-                    <p className="text-sm">Zamonaviy o'quv markazimizda</p>
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60 overflow-hidden relative">
+                  {/* Offline class image */}
+                  <Image 
+                    src="/vhero.jpg" 
+                    alt="Zamonaviy o'quv markazimizda" 
+                    width={400} 
+                    height={240} 
+                    className="w-full h-full object-cover rounded-2xl"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
+                    <p className="text-white text-lg font-semibold">Oflayn darslar</p>
+                    <p className="text-white/90 text-sm">Zamonaviy o'quv markazimizda</p>
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60">
-                  {/* Online class image placeholder */}
-                  <div className="text-center text-gray-500 h-full flex flex-col justify-center">
-                    <Globe className="w-16 h-16 mx-auto mb-4" />
-                    <p className="text-lg">Yangi onlayn kurslar</p>
-                    <p className="text-sm">Istalgan joydan o'rganing</p>
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60 overflow-hidden relative">
+                  {/* Online class video */}
+                  <video 
+                    className="w-full h-full object-cover rounded-2xl"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  >
+                    <source src="/video-dem.MOV" type="video/quicktime" />
+                    <source src="/video-dem.MOV" type="video/mp4" />
+                    Sizning brauzeringiz video formatini qo'llab-quvvatlamaydi.
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
+                    <p className="text-white text-lg font-semibold">Yangi onlayn kurslar</p>
+                    <p className="text-white/90 text-sm">Istalgan joydan o'rganing</p>
                   </div>
                 </div>
               </div>
@@ -830,7 +854,7 @@ function TripStudyLandingContent() {
               <p className="text-gray-600 mb-6 italic">
                 "Sertifikat olganim uchun mijozlar bizga ko'proq ishonch bildirmoqda. Rahmat!"
               </p>
-              <div className="flex items-center">
+              <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
                   D
                 </div>
@@ -839,6 +863,58 @@ function TripStudyLandingContent() {
                   <p className="text-sm text-gray-500">Tur operatori</p>
                 </div>
               </div>
+              {/* Certificate image */}
+              <div className="mt-4">
+                <Image 
+                  src="/oooooo.jpg" 
+                  alt="Sertifikat" 
+                  width={300} 
+                  height={200} 
+                  className="w-full h-32 object-cover rounded-lg border-2 border-green-200"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Certificates Section */}
+      <section className="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Bizning sertifikatlarimiz</h2>
+            <p className="text-xl text-gray-600">Rasmiy tan olingan sertifikatlar bilan kasbiy rivojlanish</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="flex items-center mb-4">
+                <Award className="w-6 h-6 text-purple-600 mr-2" />
+                <h3 className="text-xl font-bold text-gray-900">Turizm bo'yicha sertifikat</h3>
+              </div>
+              <Image 
+                src="/oooooo.jpg" 
+                alt="Turizm sertifikati" 
+                width={400} 
+                height={300} 
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+              <p className="text-gray-600">Rasmiy tan olingan turizm ta'limi sertifikati</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="flex items-center mb-4">
+                <Award className="w-6 h-6 text-blue-600 mr-2" />
+                <h3 className="text-xl font-bold text-gray-900">Malaka oshirish sertifikati</h3>
+              </div>
+              <Image 
+                src="/2025-08-07 14.23.44.jpg" 
+                alt="Malaka oshirish sertifikati" 
+                width={400} 
+                height={300} 
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+              <p className="text-gray-600">2025 yilgi malaka oshirish kursi sertifikati</p>
             </div>
           </div>
         </div>

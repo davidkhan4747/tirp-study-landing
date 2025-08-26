@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   // Отключаем автоматический CORS прокси
   async rewrites() {
     return []
@@ -25,7 +26,23 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    dangerouslyAllowSVG: true,
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      }
+    ],
   },
+  // Отключаем минификацию для повышения стабильности
+  swcMinify: false,
+  // Статические ассеты всегда доступны
+  assetPrefix: '',
 }
 
 export default nextConfig

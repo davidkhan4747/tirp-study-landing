@@ -241,9 +241,15 @@ function CoursesSection() {
                     <div className="text-2xl font-bold text-[#672c8e]">
                       {(course.price / 1000).toLocaleString()}k so'm
                     </div>
-                    <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                      Ro'yxatdan o'tish
-                    </button>
+                    <Link 
+                      href={`https://my.tripstudy.uz/dashboard/courses/${course.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                        Ro'yxatdan o'tish
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -263,11 +269,11 @@ function CoursesSection() {
           </div>
         )}
 
-        <div className="text-center mt-12">
-          <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            Barcha kurslarni ko'rish
-          </button>
-        </div>
+        {/*<div className="text-center mt-12">*/}
+        {/*  <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">*/}
+        {/*    Barcha kurslarni ko'rish*/}
+        {/*  </button>*/}
+        {/*</div>*/}
       </div>
     </section>
   )

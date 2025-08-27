@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Делаем запрос к внешнему GraphQL API
     console.log("Making request to external GraphQL API...")
 
-    const response = await fetch("http://89.232.184.198:3301/graphql", {
+    const response = await fetch("http://api.tripstudy.uz/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       data = JSON.parse(responseText)
       console.log("Successfully parsed JSON response")
     } catch (parseError) {
-      console.error("JSON Parse Error:", parseError.message)
+      console.error("JSON Parse Error:")
       throw new Error("Failed to parse JSON response from external API")
     }
 
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("=== GraphQL Proxy Error ===")
-    console.error("Error:", error.message)
+    console.error("Error:")
 
     // Возвращаем ошибку для Apollo Client
     return NextResponse.json(
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
             message: "GraphQL API temporarily unavailable",
             extensions: {
               code: "API_UNAVAILABLE",
-              originalError: error.message,
+              originalError: "GraphQL API temporarily unavailable",
             },
           },
         ],
@@ -133,6 +133,6 @@ export async function GET() {
   return NextResponse.json({
     status: "GraphQL Proxy is running",
     timestamp: new Date().toISOString(),
-    endpoint: "http://89.232.184.198:3301/graphql",
+    endpoint: "http://api.tripstudy.uz/graphql",
   })
 }

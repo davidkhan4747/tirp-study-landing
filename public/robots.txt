@@ -1,0 +1,40 @@
+# Robots.txt для Trip Tour Study
+User-agent: *
+Allow: /
+
+# Разрешить индексацию всех основных страниц
+Allow: /#about
+Allow: /#features  
+Allow: /#courses
+Allow: /#contact
+
+# Запретить индексацию служебных файлов
+Disallow: /_next/
+Disallow: /api/
+Disallow: /.well-known/
+Disallow: /admin/
+
+# Указать местоположение sitemap
+Sitemap: https://tripstudy.uz/sitemap.xml
+
+# Настройки для основных поисковых систем
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+# Дополнительные настройки для SEO
+# Разрешить доступ к изображениям
+User-agent: Googlebot-Image
+Allow: /
+
+# Разрешить доступ к видео
+User-agent: Googlebot-Video
+Allow: /

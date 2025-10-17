@@ -1,0 +1,52 @@
+{
+  "name": "Trip Tour Study - Turizm ta'lim platformasi",
+  "short_name": "TripStudy",
+  "description": "O'zbekistondagi eng yirik turizm ta'lim platformasi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#672c8e",
+  "orientation": "portrait-primary",
+  "categories": ["education", "business", "productivity"],
+  "lang": "uz",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/logo-trip-study.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/logo-trip-study.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/vhereoMain.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "Trip Tour Study asosiy sahifa"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Kurslar",
+      "short_name": "Kurslar",
+      "description": "Barcha mavjud kurslarni ko'rish",
+      "url": "/#courses",
+      "icons": [{ "src": "/logo-trip-study.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Biz haqimizda",
+      "short_name": "Haqimizda", 
+      "description": "Trip Tour Study haqida ma'lumot",
+      "url": "/#about",
+      "icons": [{ "src": "/logo-trip-study.png", "sizes": "96x96" }]
+    }
+  ]
+}

@@ -393,7 +393,7 @@ function TripStudyLandingContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <Image src="/logo-trip-study.png" alt="Trip Tour Study Logo" width={32} height={32} className="w-8 h-8" />
+              <Image src="/logo-trip-study.png" alt="Trip Tour Study - O'zbekistondagi #1 turizm ta'lim platformasi logotipi" width={32} height={32} className="w-8 h-8" />
               <span className="text-xl font-bold text-[#672c8e]">Trip Tour Study</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -409,9 +409,12 @@ function TripStudyLandingContent() {
               <Link href="#contact" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
                 Aloqa
               </Link>
-              <button className="bg-[#672c8e] text-white px-6 py-2 rounded-lg hover:bg-[#5a2478] transition-all duration-300 shadow-lg hover:shadow-xl">
-                Kirish
-              </button>
+                <a target={'_blank'} href="http://my.tripstudy.uz" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
+                  <button className="bg-[#672c8e] text-white px-6 py-2 rounded-lg hover:bg-[#5a2478] transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Kirish
+                  </button>
+                </a>
+
             </div>
           </div>
         </div>
@@ -472,7 +475,7 @@ function TripStudyLandingContent() {
                 <div className="w-full max-w-lg h-96 bg-gradient-to-br from-[#672c8e] via-purple-600 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 overflow-hidden relative">
                   <Image 
                     src="/vhereoMain.jpg" 
-                    alt="Trip Tour Study Hero" 
+                    alt="Trip Tour Study - Interaktiv onlayn turizm ta'limi, zamonaviy o'quv markazimizda professional mentorlar bilan" 
                     width={500} 
                     height={400} 
                     className="w-full h-full object-cover rounded-3xl"
@@ -701,7 +704,7 @@ function TripStudyLandingContent() {
                   {/* Offline class image */}
                   <Image 
                     src="/vhero.jpg" 
-                    alt="Zamonaviy o'quv markazimizda" 
+                    alt="Trip Tour Study zamonaviy o'quv markazi - oflayn turizm kurslari, professional ta'lim muhiti" 
                     width={400} 
                     height={240} 
                     className="w-full h-full object-cover rounded-2xl"
@@ -873,7 +876,7 @@ function TripStudyLandingContent() {
               <div className="mt-4">
                 <Image 
                   src="/oooooo.jpg" 
-                  alt="Sertifikat" 
+                  alt="Trip Tour Study rasmiy turizm ta'limi sertifikati - professional malaka tasdiqlovchi hujjat" 
                   width={300} 
                   height={200} 
                   className="w-full h-32 object-cover rounded-lg border-2 border-green-200"
@@ -900,7 +903,7 @@ function TripStudyLandingContent() {
               </div>
               <Image 
                 src="/oooooo.jpg" 
-                alt="Turizm sertifikati" 
+                alt="Trip Tour Study turizm bo'yicha rasmiy tan olingan sertifikat - kasbiy rivojlanish uchun" 
                 width={400} 
                 height={300} 
                 className="w-full h-64 object-cover rounded-lg mb-4"

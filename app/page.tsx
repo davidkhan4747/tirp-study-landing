@@ -160,16 +160,34 @@ function CoursesSection() {
           },
           body: JSON.stringify({
             query: `
-              query GetCoursesPublic {
-                courses {
+              query GetPublishedCourses {
+                coursesPulished {
                   id
                   title
                   description
-                  price
                   imageUrl
+                  price
                   isPublished
                   isOnline
                   enrollmentLimit
+                  location
+                  startDate
+                  endDate
+                  schedule
+                  durationWeeks
+                  maxStudents
+                  createdAt
+                  updatedAt
+                  instructorId
+                  slug
+                  tags
+                  categories
+                  language
+                  level
+                  format
+                  status
+                  averageRating
+                  reviewCount
                   instructor {
                     id
                     name
@@ -183,12 +201,12 @@ function CoursesSection() {
 
         const result = await response.json();
 
-        if (result.data?.courses) {
-          const onlineCourses = result.data.courses.filter(
-            (course: any) => course.isPublished && course.isOnline,
+        if (result.data?.coursesPulished) {
+          const publishedCourses = result.data.coursesPulished.filter(
+            (course: any) => course.isPublished,
           );
-          if (onlineCourses.length > 0) {
-            setCourses(onlineCourses);
+          if (publishedCourses.length > 0) {
+            setCourses(publishedCourses);
           }
         }
       } catch (err) {

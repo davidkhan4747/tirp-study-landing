@@ -19,133 +19,9 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-// Мок данные для курсов
-const mockCourses = [
-  {
-    id: "1",
-    title: "Turizm biznesini boshqarish",
-    description:
-      "Turizm kompaniyalarini boshqarish, marketing va moliyaviy rejalashtirishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-    price: 500000,
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    isPublished: true,
-    enrollmentLimit: 25,
-    instructor: {
-      id: "1",
-      name: "Aziz Karimov",
-      email: "aziz@example.com",
-      __typename: "User",
-    },
-    instructorId: "1",
-    createdAt: "2024-01-15T10:00:00.000Z",
-    updatedAt: "2024-01-15T10:00:00.000Z",
-    __typename: "Course",
-  },
-  {
-    id: "2",
-    title: "Turizm marketingi",
-    description:
-      "Turizm marketingi, reklama va PRni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-    price: 600000,
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    isPublished: true,
-    enrollmentLimit: 20,
-    instructor: {
-      id: "2",
-      name: "Malika Tosheva",
-      email: "malika@example.com",
-      __typename: "User",
-    },
-    instructorId: "2",
-    createdAt: "2024-01-20T10:00:00.000Z",
-    updatedAt: "2024-01-20T10:00:00.000Z",
-    __typename: "Course",
-  },
-  {
-    id: "3",
-    title: "Tur operatorligi",
-    description:
-      "Tur operatorligi, marshrutlar va ekskursiyalar tashkil etishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-    price: 400000,
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    isPublished: true,
-    enrollmentLimit: 30,
-    instructor: {
-      id: "3",
-      name: "Davron Aliyev",
-      email: "davron@example.com",
-      __typename: "User",
-    },
-    instructorId: "3",
-    createdAt: "2024-01-25T10:00:00.000Z",
-    updatedAt: "2024-01-25T10:00:00.000Z",
-    __typename: "Course",
-  },
-  {
-    id: "4",
-    title: "Turizm menejmenti",
-    description:
-      "Turizm menejmenti, turizm kompaniyalarini boshqarish va rivojlantirishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-    price: 700000,
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    isPublished: true,
-    enrollmentLimit: 15,
-    instructor: {
-      id: "4",
-      name: "Sardor Rahimov",
-      email: "sardor@example.com",
-      __typename: "User",
-    },
-    instructorId: "4",
-    createdAt: "2024-02-01T10:00:00.000Z",
-    updatedAt: "2024-02-01T10:00:00.000Z",
-    __typename: "Course",
-  },
-  {
-    id: "5",
-    title: "Turizm iqtisodiyoti",
-    description:
-      "Turizm iqtisodiyoti, turizmning iqtisodiyotga ta'siri va turizmni rivojlantirishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-    price: 800000,
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    isPublished: true,
-    enrollmentLimit: 12,
-    instructor: {
-      id: "5",
-      name: "Nilufar Karimova",
-      email: "nilufar@example.com",
-      __typename: "User",
-    },
-    instructorId: "5",
-    createdAt: "2024-02-05T10:00:00.000Z",
-    updatedAt: "2024-02-05T10:00:00.000Z",
-    __typename: "Course",
-  },
-  {
-    id: "6",
-    title: "Turizm huquqi",
-    description:
-      "Turizm huquqi, turizmga oid qonunlar va nizomlarni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-    price: 900000,
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    isPublished: true,
-    enrollmentLimit: 10,
-    instructor: {
-      id: "6",
-      name: "Bobur Tursunov",
-      email: "bobur@example.com",
-      __typename: "User",
-    },
-    instructorId: "6",
-    createdAt: "2024-02-10T10:00:00.000Z",
-    updatedAt: "2024-02-10T10:00:00.000Z",
-    __typename: "Course",
-  },
-];
-
 // Компонент для курсов (без Apollo для SSG совместимости)
 function CoursesSection() {
-  const [courses, setCourses] = useState(mockCourses);
+  const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -202,12 +78,7 @@ function CoursesSection() {
         const result = await response.json();
 
         if (result.data?.coursesPulished) {
-          const publishedCourses = result.data.coursesPulished.filter(
-            (course: any) => course.isPublished,
-          );
-          if (publishedCourses.length > 0) {
-            setCourses(publishedCourses);
-          }
+          setCourses(result.data.coursesPulished);
         }
       } catch (err) {
         console.error("Failed to fetch courses:", err);

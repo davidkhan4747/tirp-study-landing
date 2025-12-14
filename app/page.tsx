@@ -168,6 +168,7 @@ function CoursesSection() {
                   price
                   imageUrl
                   isPublished
+                  isOnline
                   enrollmentLimit
                   instructor {
                     id
@@ -183,11 +184,11 @@ function CoursesSection() {
         const result = await response.json();
 
         if (result.data?.courses) {
-          const publishedCourses = result.data.courses.filter(
-            (course: any) => course.isPublished,
+          const onlineCourses = result.data.courses.filter(
+            (course: any) => course.isPublished && course.isOnline,
           );
-          if (publishedCourses.length > 0) {
-            setCourses(publishedCourses);
+          if (onlineCourses.length > 0) {
+            setCourses(onlineCourses);
           }
         }
       } catch (err) {

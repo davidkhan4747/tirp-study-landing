@@ -13,7 +13,6 @@ import {
   TrendingUp,
   Globe,
   Shield,
-  AlertCircle,
   Instagram,
   Send,
 } from "lucide-react";
@@ -174,7 +173,7 @@ function CoursesSection() {
 
                   <div className="flex justify-between items-center">
                     <div className="text-2xl font-bold text-[#672c8e]">
-                      {(course.price / 1000).toLocaleString()}k so'm
+                      {Number(course.price).toLocaleString()} so'm
                     </div>
                     <Link
                       href={`https://my.tripstudy.uz/dashboard/courses/${course.id}`}

@@ -192,20 +192,6 @@ function CoursesSection() {
           </div>
         )}
 
-        {error && (
-          <div className="text-center mt-8">
-            <div className="inline-flex items-center bg-blue-50 text-blue-800 px-6 py-3 rounded-lg border border-blue-200">
-              <AlertCircle className="w-5 h-5 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">Demo rejimida ishlayapti</div>
-                <div className="text-sm opacity-75">
-                  Haqiqiy kurslar tez orada yuklanadi
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/*<div className="text-center mt-12">*/}
         {/*  <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">*/}
         {/*    Barcha kurslarni ko'rish*/}

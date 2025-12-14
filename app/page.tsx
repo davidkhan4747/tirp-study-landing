@@ -526,13 +526,15 @@ function TripStudyLandingContent() {
                 biznesingizni yangi bosqichga olib chiqing.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                  O'rganishni boshlash
-                </button>
-                <button className="flex items-center justify-center border-2 border-[#672c8e] text-[#672c8e] px-8 py-4 rounded-xl text-lg font-semibold hover:bg-[#672c8e] hover:text-white transition-all duration-300">
-                  <Play className="w-5 h-5 mr-2" />
-                  Demo ko'rish
-                </button>
+                <a
+                  href="https://my.tripstudy.uz/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    O'rganishni boshlash
+                  </button>
+                </a>
               </div>
 
               {/* Mini stats */}
@@ -776,18 +778,10 @@ function TripStudyLandingContent() {
                 texnologiyalar va tajribali mentorlar yordamida professional
                 ko'nikmalarni rivojlantirishga yordam beradi.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                Biz nafaqat onlayn, balki oflayn darslarni ham taklif etamiz.
-                Bizning oflayn darslarimiz zamonaviy o'quv markazimizda
-                o'tkaziladi, bu yerda talabalar mentorlar bilan bevosita muloqot
-                qilish va amaliy ko'nikmalarni rivojlantirish imkoniyatiga ega
-                bo'ladilar.
-              </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                Yaqinda yangi onlayn kurslarimiz ishga tushdi! Video darslar,
-                interaktiv testlar, amaliy mashg'ulotlar va professional
-                sertifikatlar orqali o'z bilimlaringizni yangi darajaga olib
-                chiqing.
+                Bizning onlayn kurslarimiz video darslar, interaktiv testlar,
+                amaliy mashg'ulotlar va professional sertifikatlar orqali o'z
+                bilimlaringizni yangi darajaga olib chiqishga yordam beradi.
               </p>
 
               <div className="grid grid-cols-2 gap-6">
@@ -825,46 +819,26 @@ function TripStudyLandingContent() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60 overflow-hidden relative">
-                  {/* Offline class image */}
-                  <Image
-                    src="/vhero.jpg"
-                    alt="Trip Tour Study zamonaviy o'quv markazi - oflayn turizm kurslari, professional ta'lim muhiti"
-                    width={400}
-                    height={240}
-                    className="w-full h-full object-cover rounded-2xl"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
-                    <p className="text-white text-lg font-semibold">
-                      Oflayn darslar
-                    </p>
-                    <p className="text-white/90 text-sm">
-                      Zamonaviy o'quv markazimizda
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60 overflow-hidden relative">
-                  {/* Online class video */}
-                  <video
-                    className="w-full h-full object-cover rounded-2xl"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  >
-                    <source src="/video-dem.MOV" type="video/quicktime" />
-                    <source src="/video-dem.MOV" type="video/mp4" />
-                    Sizning brauzeringiz video formatini qo'llab-quvvatlamaydi.
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
-                    <p className="text-white text-lg font-semibold">
-                      Yangi onlayn kurslar
-                    </p>
-                    <p className="text-white/90 text-sm">
-                      Istalgan joydan o'rganing
-                    </p>
-                  </div>
+              <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-80 overflow-hidden relative">
+                {/* Online class video */}
+                <video
+                  className="w-full h-full object-cover rounded-2xl"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                >
+                  <source src="/video-dem.MOV" type="video/quicktime" />
+                  <source src="/video-dem.MOV" type="video/mp4" />
+                  Sizning brauzeringiz video formatini qo'llab-quvvatlamaydi.
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
+                  <p className="text-white text-lg font-semibold">
+                    Onlayn kurslar
+                  </p>
+                  <p className="text-white/90 text-sm">
+                    Istalgan joydan o'rganing
+                  </p>
                 </div>
               </div>
             </div>

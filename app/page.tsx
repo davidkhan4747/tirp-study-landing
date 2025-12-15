@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 import {
   BookOpen,
   Clock,
@@ -13,161 +13,87 @@ import {
   TrendingUp,
   Globe,
   Shield,
-  AlertCircle,
   Instagram,
   Send,
-} from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import { ApolloProvider, useQuery } from "@apollo/client"
-import client from "../lib/apollo-client"
-import { GET_COURSES_PUBLIC } from "../lib/queries"
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-// Компонент для курсов с Apollo
+// Компонент для курсов (без Apollo для SSG совместимости)
 function CoursesSection() {
-  const { loading, error, data } = useQuery(GET_COURSES_PUBLIC, {
-    errorPolicy: "all",
-    notifyOnNetworkStatusChange: true,
-  })
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Мок данные для курсов
-  const mockCourses = [
-    {
-      id: "1",
-      title: "Turizm biznesini boshqarish",
-      description:
-        "Turizm kompaniyalarini boshqarish, marketing va moliyaviy rejalashtirishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-      price: 500000,
-      imageUrl: "/placeholder.svg?height=200&width=300",
-      isPublished: true,
-      enrollmentLimit: 25,
-      instructor: {
-        id: "1",
-        name: "Aziz Karimov",
-        email: "aziz@example.com",
-        __typename: "User",
-      },
-      instructorId: "1",
-      createdAt: "2024-01-15T10:00:00.000Z",
-      updatedAt: "2024-01-15T10:00:00.000Z",
-      __typename: "Course",
-    },
-    {
-      id: "2",
-      title: "Turizm marketingi",
-      description:
-        "Turizm marketingi, reklama va PRni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-      price: 600000,
-      imageUrl: "/placeholder.svg?height=200&width=300",
-      isPublished: true,
-      enrollmentLimit: 20,
-      instructor: {
-        id: "2",
-        name: "Malika Tosheva",
-        email: "malika@example.com",
-        __typename: "User",
-      },
-      instructorId: "2",
-      createdAt: "2024-01-20T10:00:00.000Z",
-      updatedAt: "2024-01-20T10:00:00.000Z",
-      __typename: "Course",
-    },
-    {
-      id: "3",
-      title: "Tur operatorligi",
-      description: "Tur operatorligi, marshrutlar va ekskursiyalar tashkil etishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-      price: 400000,
-      imageUrl: "/placeholder.svg?height=200&width=300",
-      isPublished: true,
-      enrollmentLimit: 30,
-      instructor: {
-        id: "3",
-        name: "Davron Aliyev",
-        email: "davron@example.com",
-        __typename: "User",
-      },
-      instructorId: "3",
-      createdAt: "2024-01-25T10:00:00.000Z",
-      updatedAt: "2024-01-25T10:00:00.000Z",
-      __typename: "Course",
-    },
-    {
-      id: "4",
-      title: "Turizm menejmenti",
-      description:
-        "Turizm menejmenti, turizm kompaniyalarini boshqarish va rivojlantirishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-      price: 700000,
-      imageUrl: "/placeholder.svg?height=200&width=300",
-      isPublished: true,
-      enrollmentLimit: 15,
-      instructor: {
-        id: "4",
-        name: "Sardor Rahimov",
-        email: "sardor@example.com",
-        __typename: "User",
-      },
-      instructorId: "4",
-      createdAt: "2024-02-01T10:00:00.000Z",
-      updatedAt: "2024-02-01T10:00:00.000Z",
-      __typename: "Course",
-    },
-    {
-      id: "5",
-      title: "Turizm iqtisodiyoti",
-      description: "Turizm iqtisodiyoti, turizmning iqtisodiyotga ta'siri va turizmni rivojlantirishni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-      price: 800000,
-      imageUrl: "/placeholder.svg?height=200&width=300",
-      isPublished: true,
-      enrollmentLimit: 12,
-      instructor: {
-        id: "5",
-        name: "Nilufar Karimova",
-        email: "nilufar@example.com",
-        __typename: "User",
-      },
-      instructorId: "5",
-      createdAt: "2024-02-05T10:00:00.000Z",
-      updatedAt: "2024-02-05T10:00:00.000Z",
-      __typename: "Course",
-    },
-    {
-      id: "6",
-      title: "Turizm huquqi",
-      description: "Turizm huquqi, turizmga oid qonunlar va nizomlarni o'rganing. Amaliy loyihalar bilan tajriba to'plang.",
-      price: 900000,
-      imageUrl: "/placeholder.svg?height=200&width=300",
-      isPublished: true,
-      enrollmentLimit: 10,
-      instructor: {
-        id: "6",
-        name: "Bobur Tursunov",
-        email: "bobur@example.com",
-        __typename: "User",
-      },
-      instructorId: "6",
-      createdAt: "2024-02-10T10:00:00.000Z",
-      updatedAt: "2024-02-10T10:00:00.000Z",
-      __typename: "Course",
-    },
-  ]
-
-  // Определяем какие курсы показывать
-  const courses = error || !data?.courses ? mockCourses : data.courses.filter((course:any) => course.isPublished)
-
-  // Логирование для отладки
   useEffect(() => {
-    console.log("=== Apollo Query State ===")
-    console.log("Loading:", loading)
-    console.log("Error:", error?.message || "No error")
-    console.log("Data:", data ? "Data received" : "No data")
+    // Попытка загрузить курсы через API на клиенте
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: `
+              query GetPublishedCourses {
+                coursesPulished {
+                  id
+                  title
+                  description
+                  imageUrl
+                  price
+                  isPublished
+                  isOnline
+                  enrollmentLimit
+                  location
+                  startDate
+                  endDate
+                  schedule
+                  durationWeeks
+                  maxStudents
+                  createdAt
+                  updatedAt
+                  instructorId
+                  slug
+                  tags
+                  categories
+                  language
+                  level
+                  format
+                  status
+                  averageRating
+                  reviewCount
+                  instructor {
+                    id
+                    name
+                    email
+                  }
+                }
+              }
+            `,
+          }),
+        });
 
-    if (error) {
-      console.error("GraphQL Error Details:", {
-        message: error.message,
-        graphQLErrors: error.graphQLErrors,
-        networkError: error.networkError,
-      })
-    }
-  }, [loading, error, data])
+        const result = await response.json();
+
+        if (result.data?.coursesPulished) {
+          setCourses(result.data.coursesPulished);
+        }
+      } catch (err) {
+        console.error("Failed to fetch courses:", err);
+        setError("Failed to load courses");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Небольшая задержка для показа скелетона
+    const timer = setTimeout(() => {
+      fetchCourses();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section id="courses" className="py-20 bg-white">
@@ -180,14 +106,18 @@ function CoursesSection() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Professional mentorlar tomonidan tayyorlangan sifatli kurslar bilan o'z karyerangizni rivojlantiring
+            Professional mentorlar tomonidan tayyorlangan sifatli kurslar bilan
+            o'z karyerangizni rivojlantiring
           </p>
         </div>
 
         {loading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-gray-100 rounded-2xl p-6 animate-pulse">
+              <div
+                key={i}
+                className="bg-gray-100 rounded-2xl p-6 animate-pulse"
+              >
                 <div className="w-full h-48 bg-gray-200 rounded-xl mb-6"></div>
                 <div className="h-6 bg-gray-200 rounded mb-4"></div>
                 <div className="h-4 bg-gray-200 rounded mb-2"></div>
@@ -201,7 +131,7 @@ function CoursesSection() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courses.slice(0, 6).map((course:any) => (
+            {courses.slice(0, 6).map((course: any) => (
               <div
                 key={course.id}
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden"
@@ -212,8 +142,8 @@ function CoursesSection() {
                     alt={course.title}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = `/placeholder.svg?height=200&width=300&query=${encodeURIComponent(course.title + " course")}`
+                      const target = e.target as HTMLImageElement;
+                      target.src = `/placeholder.svg?height=200&width=300&query=${encodeURIComponent(course.title + " course")}`;
                     }}
                   />
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-[#672c8e]">
@@ -225,23 +155,27 @@ function CoursesSection() {
                   <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#672c8e] transition-colors">
                     {course.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">{course.description}</p>
+                  <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                    {course.description}
+                  </p>
 
                   <div className="flex items-center mb-4">
                     <div className="w-8 h-8 bg-gradient-to-r from-[#672c8e] to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
                       {course.instructor.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">{course.instructor.name}</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {course.instructor.name}
+                      </p>
                       <p className="text-xs text-gray-500">Mentor</p>
                     </div>
                   </div>
 
                   <div className="flex justify-between items-center">
                     <div className="text-2xl font-bold text-[#672c8e]">
-                      {(course.price / 1000).toLocaleString()}k so'm
+                      {Number(course.price).toLocaleString()} so'm
                     </div>
-                    <Link 
+                    <Link
                       href={`https://my.tripstudy.uz/dashboard/courses/${course.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -257,18 +191,6 @@ function CoursesSection() {
           </div>
         )}
 
-        {error && (
-          <div className="text-center mt-8">
-            <div className="inline-flex items-center bg-blue-50 text-blue-800 px-6 py-3 rounded-lg border border-blue-200">
-              <AlertCircle className="w-5 h-5 mr-2" />
-              <div className="text-left">
-                <div className="font-semibold">Demo rejimida ishlayapti</div>
-                <div className="text-sm opacity-75">Haqiqiy kurslar tez orada yuklanadi</div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/*<div className="text-center mt-12">*/}
         {/*  <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">*/}
         {/*    Barcha kurslarni ko'rish*/}
@@ -276,7 +198,7 @@ function CoursesSection() {
         {/*</div>*/}
       </div>
     </section>
-  )
+  );
 }
 
 // Остальные компоненты остаются без изменений...
@@ -287,55 +209,61 @@ function AnimatedCounter({
   target,
   suffix = "",
   duration = 2000,
-}: { target: number; suffix?: string; duration?: number }) {
-  const [count, setCount] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-  const counterRef = useRef<HTMLSpanElement>(null)
+}: {
+  target: number;
+  suffix?: string;
+  duration?: number;
+}) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const counterRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isVisible) {
-          setIsVisible(true)
+          setIsVisible(true);
         }
       },
       { threshold: 0.3 },
-    )
+    );
 
     if (counterRef.current) {
-      observer.observe(counterRef.current)
+      observer.observe(counterRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [isVisible])
+    return () => observer.disconnect();
+  }, [isVisible]);
 
   useEffect(() => {
-    if (!isVisible) return
+    if (!isVisible) return;
 
-    let startTime: number | null = null
-    const startValue = 0
+    let startTime: number | null = null;
+    const startValue = 0;
 
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime
-      const progress = Math.min((currentTime - startTime) / duration, 1)
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
 
-      const currentCount = Math.floor(progress * (target - startValue) + startValue)
-      setCount(currentCount)
+      const currentCount = Math.floor(
+        progress * (target - startValue) + startValue,
+      );
+      setCount(currentCount);
 
       if (progress < 1) {
-        requestAnimationFrame(animate)
+        requestAnimationFrame(animate);
       }
-    }
+    };
 
-    requestAnimationFrame(animate)
-  }, [isVisible, target, duration])
+    requestAnimationFrame(animate);
+  }, [isVisible, target, duration]);
 
   return (
     <span ref={counterRef}>
       {count.toLocaleString()}
       {suffix}
     </span>
-  )
+  );
 }
 
 // Компонент анимированного прогресс бара
@@ -343,37 +271,41 @@ function AnimatedProgressBar({
   width,
   delay = 0,
   color = "from-purple-500 to-blue-500",
-}: { width: number; delay?: number; color?: string }) {
-  const [isVisible, setIsVisible] = useState(false)
-  const [currentWidth, setCurrentWidth] = useState(0)
-  const barRef = useRef<HTMLDivElement>(null)
+}: {
+  width: number;
+  delay?: number;
+  color?: string;
+}) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentWidth, setCurrentWidth] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isVisible) {
-          setIsVisible(true)
+          setIsVisible(true);
         }
       },
       { threshold: 0.3 },
-    )
+    );
 
     if (barRef.current) {
-      observer.observe(barRef.current)
+      observer.observe(barRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [isVisible])
+    return () => observer.disconnect();
+  }, [isVisible]);
 
   useEffect(() => {
-    if (!isVisible) return
+    if (!isVisible) return;
 
     const timer = setTimeout(() => {
-      setCurrentWidth(width)
-    }, delay)
+      setCurrentWidth(width);
+    }, delay);
 
-    return () => clearTimeout(timer)
-  }, [isVisible, width, delay])
+    return () => clearTimeout(timer);
+  }, [isVisible, width, delay]);
 
   return (
     <div className="w-full bg-gray-200 rounded-full h-1.5 mb-2" ref={barRef}>
@@ -382,7 +314,7 @@ function AnimatedProgressBar({
         style={{ width: `${currentWidth}%` }}
       ></div>
     </div>
-  )
+  );
 }
 
 function TripStudyLandingContent() {
@@ -393,28 +325,51 @@ function TripStudyLandingContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <Image src="/logo-trip-study.png" alt="Trip Tour Study - O'zbekistondagi #1 turizm ta'lim platformasi logotipi" width={32} height={32} className="w-8 h-8" />
-              <span className="text-xl font-bold text-[#672c8e]">Trip Tour Study</span>
+              <Image
+                src="/logo-trip-study.png"
+                alt="Trip Tour Study - O'zbekistondagi #1 turizm ta'lim platformasi logotipi"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
+              <span className="text-xl font-bold text-[#672c8e]">
+                Trip Tour Study
+              </span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#about" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
+              <Link
+                href="#about"
+                className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium"
+              >
                 Biz haqimizda
               </Link>
-              <Link href="#features" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
+              <Link
+                href="#features"
+                className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium"
+              >
                 Imkoniyatlar
               </Link>
-              <Link href="#courses" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
+              <Link
+                href="#courses"
+                className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium"
+              >
                 Kurslar
               </Link>
-              <Link href="#contact" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
+              <Link
+                href="#contact"
+                className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium"
+              >
                 Aloqa
               </Link>
-                <a target={'_blank'} href="http://my.tripstudy.uz" className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium">
-                  <button className="bg-[#672c8e] text-white px-6 py-2 rounded-lg hover:bg-[#5a2478] transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Kirish
-                  </button>
-                </a>
-
+              <a
+                target={"_blank"}
+                href="http://my.tripstudy.uz"
+                className="text-gray-600 hover:text-[#672c8e] transition-colors font-medium"
+              >
+                <button className="bg-[#672c8e] text-white px-6 py-2 rounded-lg hover:bg-[#5a2478] transition-all duration-300 shadow-lg hover:shadow-xl">
+                  Kirish
+                </button>
+              </a>
             </div>
           </div>
         </div>
@@ -441,16 +396,20 @@ function TripStudyLandingContent() {
                 ga xush kelibsiz
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed mb-8 max-w-lg">
-                Turizm biznesini rivojlantirish uchun zamonaviy onlayn platforma. Professional ko'nikmalarni rivojlantiring va biznesingizni yangi bosqichga olib chiqing.
+                Turizm biznesini rivojlantirish uchun zamonaviy onlayn
+                platforma. Professional ko'nikmalarni rivojlantiring va
+                biznesingizni yangi bosqichga olib chiqing.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                  O'rganishni boshlash
-                </button>
-                <button className="flex items-center justify-center border-2 border-[#672c8e] text-[#672c8e] px-8 py-4 rounded-xl text-lg font-semibold hover:bg-[#672c8e] hover:text-white transition-all duration-300">
-                  <Play className="w-5 h-5 mr-2" />
-                  Demo ko'rish
-                </button>
+                <a
+                  href="https://my.tripstudy.uz/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    O'rganishni boshlash
+                  </button>
+                </a>
               </div>
 
               {/* Mini stats */}
@@ -473,11 +432,11 @@ function TripStudyLandingContent() {
             <div className="flex justify-center lg:justify-end relative">
               <div className="relative">
                 <div className="w-full max-w-lg h-96 bg-gradient-to-br from-[#672c8e] via-purple-600 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 overflow-hidden relative">
-                  <Image 
-                    src="/vhereoMain.jpg" 
-                    alt="Trip Tour Study - Interaktiv onlayn turizm ta'limi, zamonaviy o'quv markazimizda professional mentorlar bilan" 
-                    width={500} 
-                    height={400} 
+                  <Image
+                    src="/vhereoMain.jpg"
+                    alt="Trip Tour Study - Interaktiv onlayn turizm ta'limi, zamonaviy o'quv markazimizda professional mentorlar bilan"
+                    width={500}
+                    height={400}
                     className="w-full h-full object-cover rounded-3xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-br from-[#672c8e]/70 via-purple-600/50 to-pink-500/70 rounded-3xl flex items-center justify-center">
@@ -485,8 +444,12 @@ function TripStudyLandingContent() {
                       <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
                         <BookOpen className="w-10 h-10" />
                       </div>
-                      <h3 className="text-2xl font-bold mb-2">Interaktiv Darslar</h3>
-                      <p className="text-lg opacity-90">Video, test va amaliyotlar</p>
+                      <h3 className="text-2xl font-bold mb-2">
+                        Interaktiv Darslar
+                      </h3>
+                      <p className="text-lg opacity-90">
+                        Video, test va amaliyotlar
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -536,7 +499,8 @@ function TripStudyLandingContent() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Har kuni minglab talabalar bizning platformamiz orqali yangi bilimlar olmoqda
+              Har kuni minglab talabalar bizning platformamiz orqali yangi
+              bilimlar olmoqda
             </p>
           </div>
 
@@ -552,9 +516,15 @@ function TripStudyLandingContent() {
                   <AnimatedCounter target={1000} suffix="+" />
                 </div>
 
-                <div className="text-gray-600 font-medium mb-4">Faol talabalar</div>
+                <div className="text-gray-600 font-medium mb-4">
+                  Faol talabalar
+                </div>
 
-                <AnimatedProgressBar width={85} delay={500} color="from-[#672c8e] to-purple-600" />
+                <AnimatedProgressBar
+                  width={85}
+                  delay={500}
+                  color="from-[#672c8e] to-purple-600"
+                />
                 <div className="text-xs text-gray-500">+500 bu oy</div>
               </div>
             </div>
@@ -570,9 +540,15 @@ function TripStudyLandingContent() {
                   <AnimatedCounter target={10} suffix="+" />
                 </div>
 
-                <div className="text-gray-600 font-medium mb-4">Video kurslar</div>
+                <div className="text-gray-600 font-medium mb-4">
+                  Video kurslar
+                </div>
 
-                <AnimatedProgressBar width={75} delay={700} color="from-blue-500 to-cyan-500" />
+                <AnimatedProgressBar
+                  width={75}
+                  delay={700}
+                  color="from-blue-500 to-cyan-500"
+                />
                 <div className="text-xs text-gray-500">Yangi kurslar</div>
               </div>
             </div>
@@ -588,9 +564,15 @@ function TripStudyLandingContent() {
                   <AnimatedCounter target={10} suffix="+" />
                 </div>
 
-                <div className="text-gray-600 font-medium mb-4">Tajribali mentorlar</div>
+                <div className="text-gray-600 font-medium mb-4">
+                  Tajribali mentorlar
+                </div>
 
-                <AnimatedProgressBar width={90} delay={900} color="from-green-500 to-emerald-500" />
+                <AnimatedProgressBar
+                  width={90}
+                  delay={900}
+                  color="from-green-500 to-emerald-500"
+                />
                 <div className="text-xs text-gray-500">Expert darajada</div>
               </div>
             </div>
@@ -606,9 +588,15 @@ function TripStudyLandingContent() {
                   <AnimatedCounter target={90} suffix="%" />
                 </div>
 
-                <div className="text-gray-600 font-medium mb-4">Muvaffaqiyat darajasi</div>
+                <div className="text-gray-600 font-medium mb-4">
+                  Muvaffaqiyat darajasi
+                </div>
 
-                <AnimatedProgressBar width={95} delay={1100} color="from-orange-500 to-red-500" />
+                <AnimatedProgressBar
+                  width={95}
+                  delay={1100}
+                  color="from-orange-500 to-red-500"
+                />
                 <div className="text-xs text-gray-500">Yuqori natija</div>
               </div>
             </div>
@@ -655,19 +643,20 @@ function TripStudyLandingContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Trip Tour Study haqida</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                Trip Tour Study haqida
+              </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                Trip Tour Study - bu O'zbekistondagi eng yirik turizm ta'lim platformasi bo'lib, minglab talabalar uchun
-                sifatli ta'lim imkoniyatlarini taqdim etadi. Bizning platformamiz zamonaviy texnologiyalar va tajribali
-                mentorlar yordamida professional ko'nikmalarni rivojlantirishga yordam beradi.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                Biz nafaqat onlayn, balki oflayn darslarni ham taklif etamiz. Bizning oflayn darslarimiz zamonaviy o'quv markazimizda
-                o'tkaziladi, bu yerda talabalar mentorlar bilan bevosita muloqot qilish va amaliy ko'nikmalarni rivojlantirish imkoniyatiga ega bo'ladilar.
+                Trip Tour Study - bu O'zbekistondagi eng yirik turizm ta'lim
+                platformasi bo'lib, minglab talabalar uchun sifatli ta'lim
+                imkoniyatlarini taqdim etadi. Bizning platformamiz zamonaviy
+                texnologiyalar va tajribali mentorlar yordamida professional
+                ko'nikmalarni rivojlantirishga yordam beradi.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                Yaqinda yangi onlayn kurslarimiz ishga tushdi! Video darslar, interaktiv testlar, amaliy mashg'ulotlar va professional 
-                sertifikatlar orqali o'z bilimlaringizni yangi darajaga olib chiqing.
+                Bizning onlayn kurslarimiz video darslar, interaktiv testlar,
+                amaliy mashg'ulotlar va professional sertifikatlar orqali o'z
+                bilimlaringizni yangi darajaga olib chiqishga yordam beradi.
               </p>
 
               <div className="grid grid-cols-2 gap-6">
@@ -675,19 +664,25 @@ function TripStudyLandingContent() {
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <CheckCircle className="w-5 h-5 text-green-600" />
                   </div>
-                  <span className="text-gray-700 font-medium">Sertifikatlar</span>
+                  <span className="text-gray-700 font-medium">
+                    Sertifikatlar
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Globe className="w-5 h-5 text-blue-600" />
                   </div>
-                  <span className="text-gray-700 font-medium">Global standartlar</span>
+                  <span className="text-gray-700 font-medium">
+                    Global standartlar
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                     <Shield className="w-5 h-5 text-purple-600" />
                   </div>
-                  <span className="text-gray-700 font-medium">Ishonchli platforma</span>
+                  <span className="text-gray-700 font-medium">
+                    Ishonchli platforma
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -699,38 +694,26 @@ function TripStudyLandingContent() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60 overflow-hidden relative">
-                  {/* Offline class image */}
-                  <Image 
-                    src="/vhero.jpg" 
-                    alt="Trip Tour Study zamonaviy o'quv markazi - oflayn turizm kurslari, professional ta'lim muhiti" 
-                    width={400} 
-                    height={240} 
-                    className="w-full h-full object-cover rounded-2xl"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
-                    <p className="text-white text-lg font-semibold">Oflayn darslar</p>
-                    <p className="text-white/90 text-sm">Zamonaviy o'quv markazimizda</p>
-                  </div>
-                </div>
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-60 overflow-hidden relative">
-                  {/* Online class video */}
-                  <video 
-                    className="w-full h-full object-cover rounded-2xl"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  >
-                    <source src="/video-dem.MOV" type="video/quicktime" />
-                    <source src="/video-dem.MOV" type="video/mp4" />
-                    Sizning brauzeringiz video formatini qo'llab-quvvatlamaydi.
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
-                    <p className="text-white text-lg font-semibold">Yangi onlayn kurslar</p>
-                    <p className="text-white/90 text-sm">Istalgan joydan o'rganing</p>
-                  </div>
+              <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-4 h-80 overflow-hidden relative">
+                {/* Online class video */}
+                <video
+                  className="w-full h-full object-cover rounded-2xl"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                >
+                  <source src="/video-dem.MOV" type="video/quicktime" />
+                  <source src="/video-dem.MOV" type="video/mp4" />
+                  Sizning brauzeringiz video formatini qo'llab-quvvatlamaydi.
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl flex flex-col justify-end p-6">
+                  <p className="text-white text-lg font-semibold">
+                    Onlayn kurslar
+                  </p>
+                  <p className="text-white/90 text-sm">
+                    Istalgan joydan o'rganing
+                  </p>
                 </div>
               </div>
             </div>
@@ -739,15 +722,18 @@ function TripStudyLandingContent() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gradient-to-br from-gray-50 to-purple-50">
+      <section
+        id="features"
+        className="py-20 bg-gradient-to-br from-gray-50 to-purple-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
               Nega aynan Trip Tour Study?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Bizning platformamizni o'ziga xos qiladigan imkoniyatlar bilan tanishing va o'rganish sayohatingizni
-              boshlang.
+              Bizning platformamizni o'ziga xos qiladigan imkoniyatlar bilan
+              tanishing va o'rganish sayohatingizni boshlang.
             </p>
           </div>
 
@@ -757,9 +743,12 @@ function TripStudyLandingContent() {
               <div className="w-14 h-14 bg-gradient-to-r from-[#672c8e] to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <BookOpen className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Interaktiv o'rganish</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                Interaktiv o'rganish
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Dinamik kontent, testlar va amaliy mashg'ulotlar orqali samarali va qiziqarli o'rganish tajribasi.
+                Dinamik kontent, testlar va amaliy mashg'ulotlar orqali samarali
+                va qiziqarli o'rganish tajribasi.
               </p>
             </div>
 
@@ -768,9 +757,12 @@ function TripStudyLandingContent() {
               <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Clock className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Moslashuvchan jadval</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                Moslashuvchan jadval
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                24/7 kurslarga kirish imkoniyati bilan o'z vaqtingizga mos ravishda o'rganing.
+                24/7 kurslarga kirish imkoniyati bilan o'z vaqtingizga mos
+                ravishda o'rganing.
               </p>
             </div>
 
@@ -779,9 +771,12 @@ function TripStudyLandingContent() {
               <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Award className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Zamonaviy materiallar</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                Zamonaviy materiallar
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Muntazam yangilanadigan kurs kontenti va resurslar bilan eng so'nggi bilimlarni egallang.
+                Muntazam yangilanadigan kurs kontenti va resurslar bilan eng
+                so'nggi bilimlarni egallang.
               </p>
             </div>
 
@@ -790,9 +785,12 @@ function TripStudyLandingContent() {
               <div className="w-14 h-14 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Users className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Mentor yordami</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                Mentor yordami
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Tajribali mentorlardan shaxsiy yo'l-yo'riq oling va muvaffaqiyatga erishing.
+                Tajribali mentorlardan shaxsiy yo'l-yo'riq oling va
+                muvaffaqiyatga erishing.
               </p>
             </div>
           </div>
@@ -806,8 +804,13 @@ function TripStudyLandingContent() {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Mijozlar fikri</h2>
-            <p className="text-xl text-gray-600">Bizning platformamiz orqali muvaffaqiyatga erishgan tur kompaniyalari</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Mijozlar fikri
+            </h2>
+            <p className="text-xl text-gray-600">
+              Bizning platformamiz orqali muvaffaqiyatga erishgan tur
+              kompaniyalari
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -815,11 +818,16 @@ function TripStudyLandingContent() {
             <div className="bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl border border-purple-100">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
               <p className="text-gray-600 mb-6 italic">
-                "Trip Tour Study orqali turizm biznesini boshqarishni o'rgandim va hozir kompaniyamiz yaxshi rivojlanmoqda. Mentorlar juda yaxshi!"
+                "Trip Tour Study orqali turizm biznesini boshqarishni o'rgandim
+                va hozir kompaniyamiz yaxshi rivojlanmoqda. Mentorlar juda
+                yaxshi!"
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-[#672c8e] to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
@@ -827,7 +835,9 @@ function TripStudyLandingContent() {
                 </div>
                 <div>
                   <p className="font-semibold">Aziz Karimov</p>
-                  <p className="text-sm text-gray-500">Tur agentlik direktori</p>
+                  <p className="text-sm text-gray-500">
+                    Tur agentlik direktori
+                  </p>
                 </div>
               </div>
             </div>
@@ -836,11 +846,15 @@ function TripStudyLandingContent() {
             <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
               <p className="text-gray-600 mb-6 italic">
-                "Juda qulay platforma! Turizm marketingi bo'yicha bilimlarim oshdi. Kurslar juda sifatli."
+                "Juda qulay platforma! Turizm marketingi bo'yicha bilimlarim
+                oshdi. Kurslar juda sifatli."
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
@@ -857,11 +871,15 @@ function TripStudyLandingContent() {
             <div className="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl border border-green-100">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
               <p className="text-gray-600 mb-6 italic">
-                "Sertifikat olganim uchun mijozlar bizga ko'proq ishonch bildirmoqda. Rahmat!"
+                "Sertifikat olganim uchun mijozlar bizga ko'proq ishonch
+                bildirmoqda. Rahmat!"
               </p>
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
@@ -874,11 +892,11 @@ function TripStudyLandingContent() {
               </div>
               {/* Certificate image */}
               <div className="mt-4">
-                <Image 
-                  src="/oooooo.jpg" 
-                  alt="Trip Tour Study rasmiy turizm ta'limi sertifikati - professional malaka tasdiqlovchi hujjat" 
-                  width={300} 
-                  height={200} 
+                <Image
+                  src="/oooooo.jpg"
+                  alt="Trip Tour Study rasmiy turizm ta'limi sertifikati - professional malaka tasdiqlovchi hujjat"
+                  width={300}
+                  height={200}
                   className="w-full h-32 object-cover rounded-lg border-2 border-green-200"
                 />
               </div>
@@ -891,39 +909,51 @@ function TripStudyLandingContent() {
       <section className="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Bizning sertifikatlarimiz</h2>
-            <p className="text-xl text-gray-600">Rasmiy tan olingan sertifikatlar bilan kasbiy rivojlanish</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Bizning sertifikatlarimiz
+            </h2>
+            <p className="text-xl text-gray-600">
+              Rasmiy tan olingan sertifikatlar bilan kasbiy rivojlanish
+            </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center mb-4">
                 <Award className="w-6 h-6 text-purple-600 mr-2" />
-                <h3 className="text-xl font-bold text-gray-900">Turizm bo'yicha sertifikat</h3>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Turizm bo'yicha sertifikat
+                </h3>
               </div>
-              <Image 
-                src="/oooooo.jpg" 
-                alt="Trip Tour Study turizm bo'yicha rasmiy tan olingan sertifikat - kasbiy rivojlanish uchun" 
-                width={400} 
-                height={300} 
+              <Image
+                src="/oooooo.jpg"
+                alt="Trip Tour Study turizm bo'yicha rasmiy tan olingan sertifikat - kasbiy rivojlanish uchun"
+                width={400}
+                height={300}
                 className="w-full h-64 object-cover rounded-lg mb-4"
               />
-              <p className="text-gray-600">Rasmiy tan olingan turizm ta'limi sertifikati</p>
+              <p className="text-gray-600">
+                Rasmiy tan olingan turizm ta'limi sertifikati
+              </p>
             </div>
-            
+
             <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center mb-4">
                 <Award className="w-6 h-6 text-blue-600 mr-2" />
-                <h3 className="text-xl font-bold text-gray-900">Malaka oshirish sertifikati</h3>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Malaka oshirish sertifikati
+                </h3>
               </div>
-              <Image 
-                src="/2025-08-07 14.23.44.jpg" 
-                alt="Malaka oshirish sertifikati" 
-                width={400} 
-                height={300} 
+              <Image
+                src="/2025-08-07 14.23.44.jpg"
+                alt="Malaka oshirish sertifikati"
+                width={400}
+                height={300}
                 className="w-full h-64 object-cover rounded-lg mb-4"
               />
-              <p className="text-gray-600">2025 yilgi malaka oshirish kursi sertifikati</p>
+              <p className="text-gray-600">
+                2025 yilgi malaka oshirish kursi sertifikati
+              </p>
             </div>
           </div>
         </div>
@@ -942,7 +972,8 @@ function TripStudyLandingContent() {
             O'rganish sayohatingizni boshlashga tayyormisiz?
           </h2>
           <p className="text-xl text-purple-100 mb-8 leading-relaxed max-w-2xl mx-auto">
-            Minglab talabalar Trip Tour Study orqali o'z karyeralarini o'zgartirdilar. Bugun o'z sayohatingizni boshlang va
+            Minglab talabalar Trip Tour Study orqali o'z karyeralarini
+            o'zgartirdilar. Bugun o'z sayohatingizni boshlang va
             potensialingizni ochib bering.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -962,25 +993,31 @@ function TripStudyLandingContent() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <Image src="/logo-trip-study.png" alt="Trip Tour Study Logo" width={32} height={32} className="w-8 h-8" />
+                <Image
+                  src="/logo-trip-study.png"
+                  alt="Trip Tour Study Logo"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8"
+                />
                 <span className="text-2xl font-bold">Trip Tour Study</span>
               </div>
               <p className="text-gray-400 leading-relaxed mb-6 max-w-md">
-                Butun dunyo bo'ylab talabalarni zamonaviy onlayn ta'lim va professional rivojlanish imkoniyatlari bilan
-                ta'minlash.
+                Butun dunyo bo'ylab talabalarni zamonaviy onlayn ta'lim va
+                professional rivojlanish imkoniyatlari bilan ta'minlash.
               </p>
               <div className="flex space-x-4">
-                <a 
-                  href="https://www.instagram.com/turizm.maktab/" 
-                  target="_blank" 
+                <a
+                  href="https://www.instagram.com/turizm.maktab/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-[#672c8e] transition-colors cursor-pointer"
                 >
                   <Instagram className="w-5 h-5" />
                 </a>
-                <a 
-                  href="https://t.me/TRIPTOUR_STUDY" 
-                  target="_blank" 
+                <a
+                  href="https://t.me/TRIPTOUR_STUDY"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-[#672c8e] transition-colors cursor-pointer"
                 >
@@ -993,22 +1030,34 @@ function TripStudyLandingContent() {
               <h3 className="text-lg font-bold mb-6">Tezkor havolalar</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="#about" className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href="#about"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
                     Biz haqimizda
                   </Link>
                 </li>
                 <li>
-                  <Link href="#features" className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href="#features"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
                     Imkoniyatlar
                   </Link>
                 </li>
                 <li>
-                  <Link href="#courses" className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href="#courses"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
                     Kurslar
                   </Link>
                 </li>
                 <li>
-                  <Link href="tel:+99890 017 77 88" className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href="tel:+99890 017 77 88"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
                     +99890 017 77 88
                   </Link>
                 </li>
@@ -1044,7 +1093,8 @@ function TripStudyLandingContent() {
 
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 mb-4 md:mb-0">
-              {new Date().getFullYear()} Trip Tour Study. Barcha huquqlar himoyalangan.
+              {new Date().getFullYear()} Trip Tour Study. Barcha huquqlar
+              himoyalangan.
             </p>
             <div className="flex items-center space-x-6 text-sm text-gray-400">
               <span>O'zbek tilida</span>
@@ -1055,13 +1105,9 @@ function TripStudyLandingContent() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 export default function TripStudyLanding() {
-  return (
-    <ApolloProvider client={client}>
-      <TripStudyLandingContent />
-    </ApolloProvider>
-  )
+  return <TripStudyLandingContent />;
 }

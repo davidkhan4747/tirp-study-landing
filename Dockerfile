@@ -1,27 +1,40 @@
-FROM node:20-alpine
-
+# Build stage
+FROM node:22 AS builder
 WORKDIR /app
 
-# Копируем файлы зависимостей
-COPY package*.json ./
-RUN npm ci
+# Copy package files
+COPY package.json ./
 
-# Копируем все файлы проекта
+# Install dependencies
+RUN npm install
+
+# Copy source code
 COPY . .
 
-# Настройки Next.js
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
-ENV PORT 3002
+# Disable telemetry
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Специально назначаем полные права для директории public
-RUN chmod -R 755 ./public
-
-# Собираем приложение
+# Build the application
 RUN npm run build
 
-# Открываем порт
-EXPOSE 3002
+# Production stage
+FROM node:22-slim AS runner
+WORKDIR /app
 
-# Запускаем приложение
-CMD ["npm", "start"]
+# Install Chromium for Puppeteer
+RUN apt-get update && apt-get install -y chromium --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Copy standalone build
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]

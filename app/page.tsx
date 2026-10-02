@@ -18,6 +18,150 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+// Форма заявки с сайта — заявка летит админу (Насибе) с меткой source="sayt"
+function LeadFormSection() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState(""); // honeypot (скрытое поле от ботов)
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">(
+    "idle",
+  );
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (status === "loading") return;
+    if (!phone.trim()) {
+      setStatus("error");
+      setErrorMsg("Telefon raqamingizni kiriting");
+      return;
+    }
+    setStatus("loading");
+    setErrorMsg("");
+    try {
+      const response = await fetch("/api/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `mutation Submit($name: String, $phone: String!, $company: String) {
+            submitSchoolLead(name: $name, phone: $phone, company: $company) { ok message }
+          }`,
+          variables: { name, phone, company },
+        }),
+      });
+      const data = await response.json();
+      const res = data?.data?.submitSchoolLead;
+      if (res?.ok) {
+        setStatus("ok");
+        setName("");
+        setPhone("");
+      } else {
+        setStatus("error");
+        setErrorMsg(res?.message || "Xatolik yuz berdi. Qaytadan urinib ko'ring.");
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Tarmoq xatosi. Qaytadan urinib ko'ring.");
+    }
+  };
+
+  return (
+    <section
+      id="ariza"
+      className="py-20 bg-gradient-to-br from-purple-50 to-blue-50"
+    >
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-10 border border-purple-100">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+              Ariza qoldiring
+            </h2>
+            <p className="text-lg text-gray-600">
+              Ismingiz va telefon raqamingizni qoldiring — administratorimiz siz
+              bilan bog'lanadi.
+            </p>
+          </div>
+
+          {status === "ok" ? (
+            <div className="text-center py-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                <svg
+                  className="w-8 h-8 text-green-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Rahmat! Arizangiz qabul qilindi
+              </h3>
+              <p className="text-gray-600">
+                Tez orada siz bilan bog'lanamiz.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="space-y-5">
+              {/* honeypot — скрыто от людей, боты заполняют */}
+              <input
+                type="text"
+                name="company"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Ismingiz
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ismingiz"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#672c8e] focus:ring-2 focus:ring-[#672c8e]/20 outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Telefon raqamingiz <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+998 90 123 45 67"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#672c8e] focus:ring-2 focus:ring-[#672c8e]/20 outline-none transition-all"
+                />
+              </div>
+              {status === "error" && (
+                <p className="text-sm text-red-600">{errorMsg}</p>
+              )}
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="w-full bg-gradient-to-r from-[#672c8e] to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-bold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {status === "loading" ? "Yuborilmoqda..." : "Ariza yuborish"}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Компонент для курсов (без Apollo для SSG совместимости)
 function CoursesSection() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -977,15 +1121,24 @@ function TripStudyLandingContent() {
             potensialingizni ochib bering.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[#672c8e] px-10 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1">
+            <a
+              href="#ariza"
+              className="bg-white text-[#672c8e] px-10 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1"
+            >
               Hoziroq qo'shiling
-            </button>
-            <button className="border-2 border-white text-white px-10 py-4 rounded-xl text-lg font-bold hover:bg-white hover:text-[#672c8e] transition-all duration-300">
+            </a>
+            <a
+              href="#ariza"
+              className="border-2 border-white text-white px-10 py-4 rounded-xl text-lg font-bold hover:bg-white hover:text-[#672c8e] transition-all duration-300"
+            >
               Bepul sinab ko'ring
-            </button>
+            </a>
           </div>
         </div>
       </section>
+
+      {/* Ariza qoldirish — форма заявки (летит админу с меткой sayt) */}
+      <LeadFormSection />
 
       {/* Footer */}
       <footer id="contact" className="bg-gray-900 text-white py-16">
